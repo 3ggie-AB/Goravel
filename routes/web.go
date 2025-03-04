@@ -2,9 +2,8 @@ package routes
 
 import (
 	"fmt"
-	"goravel/app/helpers"
+	"goravel/app/http/controllers"
 	"strings"
-
 	"github.com/goravel/framework/contracts/http"
 	"github.com/goravel/framework/facades"
 )
@@ -19,13 +18,14 @@ func Web() {
 		fmt.Println("Final file path:", filePath)
 		return ctx.Response().File(filePath)
 	})
-	facades.Route().Get("cukai/{name}", func(ctx http.Context) http.Response {
-		// Get the "name" parameter from the URL
-		name := ctx.Request().Input("name")
 
-		// Return the view with the template file name
-		return ctx.Response().View().Make(name+".tmpl", map[string]any{
-			"assets": helpers.Asset(""),
-		})
-	})
+	landingController := controllers.NewLandingController()
+	facades.Route().Get("/", landingController.BlogIndex)
+	facades.Route().Get("/about", landingController.BlogAbout)
+	facades.Route().Get("/blog", landingController.BlogBlog)
+	facades.Route().Get("/contact", landingController.BlogContact)
+	facades.Route().Get("/generic", landingController.BlogGeneric)
+	facades.Route().Get("/services", landingController.BlogServices)
+	facades.Route().Get("/single", landingController.BlogSingle)
+	facades.Route().Get("/styles", landingController.BlogStyles)
 }
